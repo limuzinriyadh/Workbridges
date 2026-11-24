@@ -219,6 +219,8 @@ app.get('/api/site', (_req, res) => {
   });
 });
 
+import { sendBookingNotification } from './mailer.js';
+
 const bookingHits = new Map();
 app.post('/api/bookings', (req, res) => {
   const settings = getSetting('booking') || {};
@@ -256,6 +258,12 @@ app.post('/api/bookings', (req, res) => {
     .prepare(`INSERT INTO bookings (name, phone, email, pickup, destination, travel_date, pickup_time, vehicle, service, passengers, requirements, status, created_at)
       VALUES (@name, @phone, @email, @pickup, @destination, @travel_date, @pickup_time, @vehicle, @service, @passengers, @requirements, @status, @created_at)`)
     .run(record);
+
+  sendBookingNotification(record)
+    .then((result) => {
+      if (!result.sent) console.warn(`[booking ${info.lastInsertRowid}] email not sent: ${result.reason}`);
+    })
+    .catch((err) => console.error(`[booking ${info.lastInsertRowid}] email failed:`, err.message));
 
   const wa = publicWhatsapp();
   const bookingSettings = getSetting('booking') || {};
