@@ -1,11 +1,12 @@
 FROM node:26-alpine AS build
-RUN apk upgrade --no-cache
+# Toolchain for native modules (better-sqlite3) when no prebuilt binary matches this Node release.
+RUN apk upgrade --no-cache && apk add --no-cache --virtual .build python3 make g++
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 # The build needs dev dependencies; they are removed before the copy below.
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npm prune --omit=dev && apk del .build
 FROM node:26-alpine
 # The date keys the build cache so this layer installs today's OS fixes; AppJet keeps it current on deploy.
 RUN echo "os-refresh 2026-11-24" && apk upgrade --no-cache
