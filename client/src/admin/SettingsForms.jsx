@@ -541,6 +541,7 @@ export function WebsiteSection({ data, onRefresh, notify }) {
           fields={[
             { key: 'title', label: 'Booking section title', full: true },
             { key: 'intro', label: 'Booking intro text', type: 'textarea', rows: 3, full: true },
+            { key: 'notify_email', label: 'Send booking notifications to', full: true },
             { key: 'enabled', label: 'Accept booking inquiries', type: 'checkbox' },
             { key: 'whatsapp_enabled', label: 'Offer WhatsApp booking', type: 'checkbox' }
           ]}
