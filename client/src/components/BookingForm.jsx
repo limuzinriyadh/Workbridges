@@ -17,7 +17,7 @@ const EMPTY_FORM = {
   requirements: ''
 };
 
-export default function BookingForm({ defaultVehicleId = '', compact = false }) {
+export default function BookingForm({ defaultVehicleId = '', defaultService = '', compact = false }) {
   const { site } = useSite();
   const { t } = useI18n();
   const booking = site.booking || {};
@@ -27,7 +27,7 @@ export default function BookingForm({ defaultVehicleId = '', compact = false }) 
     return v ? v.name : '';
   }, [defaultVehicleId, site.vehicles]);
 
-  const [form, setForm] = useState({ ...EMPTY_FORM, vehicle: preset });
+  const [form, setForm] = useState({ ...EMPTY_FORM, vehicle: preset, service: defaultService });
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   const [waUrl, setWaUrl] = useState('');
@@ -42,7 +42,7 @@ export default function BookingForm({ defaultVehicleId = '', compact = false }) 
       const res = await api.post('/api/bookings', form);
       setStatus('done');
       setWaUrl(res?.whatsappUrl || '');
-      setForm({ ...EMPTY_FORM, vehicle: preset });
+      setForm({ ...EMPTY_FORM, vehicle: preset, service: defaultService });
     } catch (err) {
       setStatus('error');
       setError(err.message === 'booking_disabled' ? t('booking.disabled') : t('common.error'));
