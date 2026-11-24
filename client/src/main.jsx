@@ -6,6 +6,7 @@ import { SiteProvider } from './lib/site.jsx';
 import PublicApp from './public/PublicApp.jsx';
 import AdminApp from './admin/AdminApp.jsx';
 import './styles.css';
+import './premium.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

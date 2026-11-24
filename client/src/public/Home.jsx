@@ -26,6 +26,13 @@ export default function Home() {
       <section className="hero">
         <div className="container hero-inner">
           <div className="reveal">
+            {site.brand?.logo ? (
+              <img
+                className="hero-logo"
+                src={site.brand.logo}
+                alt={`${site.brand?.name || 'WORKBRIDGES'} logo`}
+              />
+            ) : null}
             <span className="hero-badge">{hero.eyebrow || 'Digital Business Platform'}</span>
             <h1>{hero.title || 'Premium transport, engineered around your schedule.'}</h1>
             <p className="hero-sub">{hero.subtitle}</p>
@@ -56,6 +63,24 @@ export default function Home() {
               {hero.image ? <img src={hero.image} alt="WORKBRIDGES luxury fleet" /> : <CarArt />}
             </div>
             {site.brand?.tagline ? <div className="floaty">{site.brand.tagline}</div> : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="brand-band">
+        <div className="container brand-band-inner">
+          {site.brand?.logo ? (
+            <>
+              <img src={site.brand.logo} alt={`${site.brand?.name || 'WORKBRIDGES'} logo`} />
+              <div className="brand-band-divider" />
+            </>
+          ) : null}
+          <div className="brand-band-copy">
+            <strong>{site.brand?.name || 'WORKBRIDGES'}</strong>
+            <span>
+              {site.brand?.identity || 'Digital Business Platform'} —{' '}
+              {site.brand?.tagline || 'Specialized Transport Services'}
+            </span>
           </div>
         </div>
       </section>

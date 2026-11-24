@@ -145,7 +145,7 @@ export const DEFAULT_SETTINGS = {
     name: 'WORKBRIDGES',
     identity: 'Digital Business Platform',
     tagline: 'Specialized Transport Services',
-    logo: '/brand/logo.svg',
+    logo: '',
     domain: 'https://workbridges.live'
   },
   contact: {
@@ -244,6 +244,12 @@ function seedSettings() {
   for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
     const exists = db.prepare('SELECT key FROM settings WHERE key = ?').get(key);
     if (!exists) insert.run(key, JSON.stringify(value), now());
+  }
+  // The owner supplies the real WORKBRIDGES logo. Drop the generated placeholder
+  // monogram from earlier builds so no invented logo is ever displayed.
+  const brand = getSetting('brand');
+  if (brand && typeof brand.logo === 'string' && brand.logo.includes('/brand/logo.svg')) {
+    setSetting('brand', { ...brand, logo: '' });
   }
 }
 

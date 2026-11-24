@@ -35,7 +35,9 @@ function Header() {
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="container header-inner">
         <Link to="/" className="brand" aria-label={site.brand?.name || 'WORKBRIDGES'}>
-          <img src={site.brand?.logo || '/brand/logo.svg'} alt="" width="46" height="46" />
+          {site.brand?.logo ? (
+            <img src={site.brand.logo} alt={`${site.brand?.name || 'WORKBRIDGES'} logo`} />
+          ) : null}
           <span className="brand-text">
             <strong>{site.brand?.name || 'WORKBRIDGES'}</strong>
             <small>{site.brand?.identity || 'Digital Business Platform'}</small>
@@ -103,7 +105,9 @@ function Footer() {
       <div className="container footer-grid">
         <div>
           <Link to="/" className="brand brand--footer">
-            <img src={site.brand?.logo || '/brand/logo.svg'} alt="" width="44" height="44" />
+            {site.brand?.logo ? (
+              <img src={site.brand.logo} alt={`${site.brand?.name || 'WORKBRIDGES'} logo`} />
+            ) : null}
             <span className="brand-text">
               <strong>{site.brand?.name || 'WORKBRIDGES'}</strong>
               <small>{site.brand?.tagline || 'Specialized Transport Services'}</small>
