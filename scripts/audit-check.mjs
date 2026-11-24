@@ -197,10 +197,12 @@ try {
 
   // --------------------------------- contact: phone + support email swap
   const contactSave = await jsonReq('/api/admin/settings/contact', 'PUT', {
-    email: 'Limuzin@196vip.si',
-    support_email: 'support@workbridges.live',
-    phone: '+43 660 1234567',
-    website: 'https://workbridges.live'
+    value: {
+      email: 'Limuzin@196vip.si',
+      support_email: 'support@workbridges.live',
+      phone: '+43 660 1234567',
+      website: 'https://workbridges.live'
+    }
   });
   check('owner can save phone and support email', contactSave.status === 200, `status ${contactSave.status}`);
   pub = await site();
