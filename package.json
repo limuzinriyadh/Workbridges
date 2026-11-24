@@ -1,0 +1,30 @@
+{
+  "name": "workbridges",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WORKBRIDGES – Digital Business Platform / Specialized Transport Services",
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "node server/index.js",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "check": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "express": "^4.21.2",
+    "multer": "^2.0.1",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.0",
+    "vite": "^5.4.11"
+  }
+}
