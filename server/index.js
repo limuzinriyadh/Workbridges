@@ -364,6 +364,21 @@ function storageStats() {
   };
 }
 
+/**
+ * Merge a settings patch into the stored value without dropping sibling keys.
+ * A dashboard card may save only one nested block (e.g. homepage.welcome) and
+ * must never erase the rest of the stored object.
+ */
+function mergeSetting(base, patch) {
+  if (patch === null || typeof patch !== 'object' || Array.isArray(patch)) return patch;
+  const out = base && typeof base === 'object' && !Array.isArray(base) ? { ...base } : {};
+  for (const [key, value] of Object.entries(patch)) {
+    out[key] =
+      value && typeof value === 'object' && !Array.isArray(value) ? mergeSetting(out[key], value) : value;
+  }
+  return out;
+}
+
 app.put('/api/admin/settings/:key', requireAuth, (req, res) => {
   const key = String(req.params.key);
   if (!Object.prototype.hasOwnProperty.call(DEFAULT_SETTINGS, key)) {
@@ -371,9 +386,7 @@ app.put('/api/admin/settings/:key', requireAuth, (req, res) => {
   }
   const value = req.body?.value;
   if (value === undefined) return res.status(400).json({ error: 'value_required' });
-  const merged = typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? { ...(getSetting(key) || {}), ...value }
-    : value;
+  const merged = mergeSetting(getSetting(key) || {}, value);
   res.json({ ok: true, key, value: setSetting(key, merged) });
 });
 

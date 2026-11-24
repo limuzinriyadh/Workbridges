@@ -92,11 +92,11 @@ try {
 
   const site = await call('/api/site');
   check('public site payload loads', site.status === 200, `status ${site.status}`);
-  check('brand content is present', site.json?.settings?.brand?.name === 'WORKBRIDGES');
+  check('brand content is present', site.json?.brand?.name === 'WORKBRIDGES');
   check('seeded fleet is published', Array.isArray(site.json?.vehicles) && site.json.vehicles.length > 0);
   check('seeded services are published', Array.isArray(site.json?.services) && site.json.services.length > 0);
   check('four application slots exist', Array.isArray(site.json?.apps) && site.json.apps.length === 4);
-  check('WhatsApp starts hidden (no number configured)', site.json?.settings?.whatsapp?.enabled !== true);
+  check('WhatsApp starts hidden (no number configured)', site.json?.whatsapp?.enabled !== true);
 
   const anon = await call('/api/admin/data');
   check('admin data rejects anonymous access', anon.status === 401, `status ${anon.status}`);
@@ -128,7 +128,7 @@ try {
       published: 1
     }
   });
-  const vehicleId = created.json?.id ?? created.json?.row?.id;
+  const vehicleId = created.json?.item?.id;
   check('vehicle can be created (ADD)', created.status < 300 && !!vehicleId, `status ${created.status} ${created.text.slice(0, 160)}`);
 
   const edited = await call(`/api/admin/vehicles/${vehicleId}`, {
@@ -167,8 +167,7 @@ try {
   let publicWa = await call('/api/site');
   check(
     'public site exposes the saved WhatsApp number',
-    publicWa.json?.settings?.whatsapp?.enabled === true &&
-      publicWa.json?.settings?.whatsapp?.number === '4915112345678'
+    publicWa.json?.whatsapp?.enabled === true && publicWa.json?.whatsapp?.number === '4915112345678'
   );
 
   const waOff = await call('/api/admin/settings/whatsapp', {
@@ -179,7 +178,7 @@ try {
   publicWa = await call('/api/site');
   check(
     'removing the number hides WhatsApp everywhere',
-    publicWa.json?.settings?.whatsapp?.enabled !== true && !publicWa.json?.settings?.whatsapp?.number
+    publicWa.json?.whatsapp?.enabled !== true && !publicWa.json?.whatsapp?.number
   );
 
   /* ----------------------------------------------------------------- bookings */
@@ -219,10 +218,10 @@ try {
   });
   check('homepage content can be saved', homepage.status < 300, `status ${homepage.status}`);
   const publicHome = await call('/api/site');
-  check('homepage edit is published', publicHome.json?.settings?.homepage?.welcome?.title === 'Smoke Welcome');
+  check('homepage edit is published', publicHome.json?.homepage?.welcome?.title === 'Smoke Welcome');
   check(
     'other homepage blocks survive a partial save',
-    !!publicHome.json?.settings?.homepage?.hero?.title && Array.isArray(publicHome.json?.settings?.homepage?.about?.points)
+    !!publicHome.json?.homepage?.hero?.title && Array.isArray(publicHome.json?.homepage?.about?.points)
   );
 
   const contact = await call('/api/admin/settings/contact', {
